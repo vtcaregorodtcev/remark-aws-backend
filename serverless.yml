@@ -30,10 +30,10 @@ provider:
 custom:
   profiles: ${file(./sls/profiles.yml)}
   deploymentBuckets: ${file(./sls/deployment-buckets.yml)}
-  accountId: "#{AWS::AccountId}"
+  accountId: ${aws:accountId}
   namePrefix: ${self:service}-${self:provider.stage}-${self:provider.region}
   webpack:
-    packager: "yarn"
+    packager: "pnpm"
     keepOutputDirectory: true
   env: ${file(./sls/env.yml)}
 

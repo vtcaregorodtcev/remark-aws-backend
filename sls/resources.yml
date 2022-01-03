@@ -2,7 +2,7 @@ Resources:
   bookmarksRestApiUrlSSMParameter:
     Type: AWS::SSM::Parameter
     Properties:
-      Name: /bookmarks-rest/api-url
+      Name: /remark/${self:provider.stage}/apis/bookmarks-rest/api-url
       Type: String
       Value:
         Fn::Join:
@@ -14,11 +14,11 @@ Resources:
             - ".amazonaws.com/"
             - "${self:provider.stage}"
   bookmarksRestApiKeySSMParameter:
-      Type: AWS::SSM::Parameter
-      Properties:
-        Name: /${self:provider.stage}/apis/bookmarks-rest/api-key
-        Type: String
-        Value: ${self:custom.env.apiKey}
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /remark/${self:provider.stage}/apis/bookmarks-rest/api-key
+      Type: String
+      Value: ${self:custom.env.apiKey}
   BookmarksTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -28,25 +28,22 @@ Resources:
           AttributeType: S
         - AttributeName: Link
           AttributeType: S
-        - AttributeName: Name
-          AttributeType: S
         - AttributeName: Label
-          AttributeType: S
-        - AttributeName: BoW
           AttributeType: S
       KeySchema:
         - AttributeName: Id
           KeyType: HASH
+        - AttributeName: Label
+          KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
       GlobalSecondaryIndexes:
-        - IndexName: LabelIndex
+        - IndexName: LinkIndex
           KeySchema:
             - AttributeName: Link
               KeyType: HASH
           Projection:
-            NonKeyAttributes: 
+            NonKeyAttributes:
               - Name
-              - Label
             ProjectionType: INCLUDE
   iamLambdaRoleExecution:
     Type: AWS::IAM::Role

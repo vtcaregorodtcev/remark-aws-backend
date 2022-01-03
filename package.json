@@ -1,35 +1,24 @@
 {
-  "name": "remark-aws-backend",
-  "version": "1.0.0",
-  "private": true,
+  "name": "@vtcaregorodtcev/remark-aws-backend",
+  "version": "0.0.1",
   "author": "vtcaregorodtcev",
   "license": "MIT",
   "scripts": {
     "start": "serverless offline -s dev",
     "build": "ENV=$(echo $ENV | tr '[:upper:]' '[:lower:]') ./node_modules/.bin/sls package --package ./artifacts --config ./serverless.yml --region ${REGION:-us-east-1}",
-    "deploy-package": "ENV=$(echo $ENV | tr '[:upper:]' '[:lower:]') ./node_modules/.bin/sls deploy --package ./artifacts --config ./serverless.yml -v --region ${REGION:-us-east-1}",
-    "deploy": "ENV=$(echo $ENV | tr '[:upper:]' '[:lower:]') ./node_modules/.bin/sls deploy --config ./serverless.yml -v --region ${REGION:-us-east-1}",
-    "destroy": "ENV=$(echo $ENV | tr '[:upper:]' '[:lower:]') ./node_modules/.bin/sls remove --config ./serverless.yml -v --region ${REGION:-us-east-1}",
+    "deploy-package": "ENV=$(echo $ENV | tr '[:upper:]' '[:lower:]') ./node_modules/.bin/sls deploy --package ./artifacts --config ./serverless.yml --verbose --region ${REGION:-us-east-1}",
+    "deploy": "ENV=$(echo $ENV | tr '[:upper:]' '[:lower:]') ./node_modules/.bin/sls deploy --config ./serverless.yml --verbose --region ${REGION:-us-east-1}",
+    "destroy": "ENV=$(echo $ENV | tr '[:upper:]' '[:lower:]') ./node_modules/.bin/sls remove --config ./serverless.yml --verbose --region ${REGION:-us-east-1}",
     "test": "./node_modules/.bin/jest --silent",
     "lint": "./node_modules/.bin/eslint . --ext .js,.jsx,.ts,.tsx",
     "webpack": "./node_modules/.bin/sls webpack"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/vtcaregorodtcev/remark-aws-backend.git"
-  },
-  "bugs": {
-    "url": "https://github.com/vtcaregorodtcev/remark-aws-backendissues"
-  },
+  "repository": "https://github.com/vtcaregorodtcev/remark-aws-backend.git",
+  "bugs": "https://github.com/vtcaregorodtcev/remark-aws-backendissues",
   "homepage": "https://github.com/vtcaregorodtcev/remark-aws-backend#readme",
-  "husky": {
-    "hooks": {
-      "pre-push": "pnpm test"
-    }
-  },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.89",
-    "@types/jest": "^26.0.24",
+    "@types/jest": "^27.4.0",
     "@types/node": "^15.14.9",
     "@types/node-fetch": "^2.5.12",
     "@types/uuid": "^8.3.3",
@@ -38,7 +27,7 @@
     "aws-sdk": "^2.1048.0",
     "eslint": "^7.32.0",
     "eslint-plugin-jest": "^24.7.0",
-    "husky": "^6.0.0",
+    "inquirer": "^8.2.0",
     "jest": "^27.4.5",
     "jest-standard-reporter": "^2.0.0",
     "serverless": "^2.70.0",
@@ -58,5 +47,8 @@
     "node-fetch": "^2.6.6",
     "serverless-uuid": "^0.1.5",
     "uuid": "^8.3.2"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }
