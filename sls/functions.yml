@@ -1,0 +1,27 @@
+createBookmark:
+  handler: src/handlers/createBookmark.handler
+  name: ${self:custom.namePrefix}-create-bookmark-handler
+  events:
+    - http:
+        method: post
+        path: bookmarks
+        cors: true
+        private: true
+getBookmarks:
+  handler: src/handlers/getBookmarks.handler
+  name: ${self:custom.namePrefix}-get-bookmarks-handler
+  events:
+    - http:
+        method: get
+        path: bookmarks
+        cors: true
+        private: true
+updateBookmark:
+  handler: src/handlers/updateBookmark.handler
+  name: ${self:custom.namePrefix}-update-bookmark-handler
+  events:
+    - http:
+        method: put
+        path: bookmarks/{bookmarkId}
+        cors: true
+        private: true

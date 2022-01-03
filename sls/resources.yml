@@ -1,0 +1,95 @@
+Resources:
+  bookmarksRestApiUrlSSMParameter:
+    Type: AWS::SSM::Parameter
+    Properties:
+      Name: /bookmarks-rest/api-url
+      Type: String
+      Value:
+        Fn::Join:
+          - ""
+          - - "https://"
+            - Ref: ApiGatewayRestApi
+            - ".execute-api."
+            - "${self:provider.region}"
+            - ".amazonaws.com/"
+            - "${self:provider.stage}"
+  bookmarksRestApiKeySSMParameter:
+      Type: AWS::SSM::Parameter
+      Properties:
+        Name: /${self:provider.stage}/apis/bookmarks-rest/api-key
+        Type: String
+        Value: ${self:custom.env.apiKey}
+  BookmarksTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: ${self:custom.env.bookmarksTableName}
+      AttributeDefinitions:
+        - AttributeName: Id
+          AttributeType: S
+        - AttributeName: Link
+          AttributeType: S
+        - AttributeName: Name
+          AttributeType: S
+        - AttributeName: Label
+          AttributeType: S
+        - AttributeName: BoW
+          AttributeType: S
+      KeySchema:
+        - AttributeName: Id
+          KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+      GlobalSecondaryIndexes:
+        - IndexName: LabelIndex
+          KeySchema:
+            - AttributeName: Link
+              KeyType: HASH
+          Projection:
+            NonKeyAttributes: 
+              - Name
+              - Label
+            ProjectionType: INCLUDE
+  iamLambdaRoleExecution:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ${self:custom.namePrefix}-lambda-role-execution
+      Description: "Lambda execution role for ${self:custom.env.serviceName}"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Policies:
+        - PolicyName: Logging_Policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - logs:CreateLogGroup
+                  - logs:CreateLogStream
+                  - logs:PutLogEvents
+                Resource:
+                  - "arn:aws:logs:*:*:*"
+        - PolicyName: DynamoDB_Policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - dynamodb:Query
+                  - dynamodb:Scan
+                  - dynamodb:GetItem
+                  - dynamodb:PutItem
+                  - dynamodb:UpdateItem
+                  - dynamodb:DeleteItem
+                Resource:
+                  - "arn:aws:dynamodb:${self:provider.region}:${self:custom.accountId}:table/${self:custom.env.bookmarksTableName}"
+                  - "arn:aws:dynamodb:${self:provider.region}:${self:custom.accountId}:table/${self:custom.env.bookmarksTableName}/index/*"
+                  # Only for migration remove or comment this
+                  - "arn:aws:dynamodb:${self:provider.region}:${self:custom.accountId}:table/*"
