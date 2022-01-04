@@ -13,6 +13,8 @@ provider:
   logRetentionInDays: ${self:custom.env.lambdaLogsRotation}
   lambdaHashingVersion: ${self:custom.env.lambdaHashingVersion}
   apiGateway:
+    apiKeys:
+      - value: ${self:custom.env.apiKey}
     usagePlan:
       quota:
         limit: 5000

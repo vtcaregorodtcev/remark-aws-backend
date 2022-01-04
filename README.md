@@ -1,36 +1,43 @@
-# aws-rest-api-serverless-lambda
+# Remark-aws-backend
 
-Open-source hands-on guide to build real production ready rest api in Serverless manner
+Open-source AWS based backend for Remark, AI-powered <b>`bookmark manager`</b> for web. 
 
-## Flow
+## Why?
 
-1. Create Id and Key on [AWS console](https://console.aws.amazon.com/iam/home#/security_credentials) in "Access keys (access key ID and secret access key)" tab.
-2. See `./sls/profiles` in repository to set or get available profiles names.
-3. Create or update `~/.aws/config` and `~/.aws/credentials` on your machine to setup profiles in both files which you got on 2nd step.
+Instead of relying on side services that take control over your data let's use the one of the biggest in the industry. So there is left to care only about costs for using the lambdas, the moment of which will happen not in the near future with the Free Tier provided by AWS.
+
+## How?
+
+First of all you need to prepare the place for unfolding the backend. You need an AWS account to have access to [AWS console](https://console.aws.amazon.com/iam/home#/security_credentials).
+
+1. Click <b>`"Access keys (access key ID and secret access key)"`</b> tab and create Id and Key
+2. Create or update <b>`~/.aws/config`</b> and <b>`~/.aws/credentials`</b> on your machine to setup remark profile with secrets which you got on the first step.
 
 ```bash
+# ~/.aws/config
+
+[remark]
+region = us-west-1 # or whatever you prefer
+output = json
+```
+
+```bash
+# ~/.aws/credentials
+
 [remark]
 aws_access_key_id=YOUR_ID
 aws_secret_access_key=YOUR_KEY
 ```
 
-4. Use alias for your profile dev, prod etc. for ENV variable.
-5. After deploy you can check your [api services](https://console.aws.amazon.com/apigateway/main/apis) and test endpoints.
+3. Then you need to deploy this backend to your AWS account. The commnd below will download this package, find configured profile and upload it to found AWS account.
 
-## Build
+```bash
+npx -p @vtcaregorodtcev/remark-aws-backend -c "npm run deploy"
+```
 
-`pnpm build`
+4. After deploy you can check your [api services](https://console.aws.amazon.com/apigateway/main/apis) under your AWS account and test endpoints.
+5. If you want to use preconfigured profiles or other regions you can extend above command.
 
-## Deploy
-
-If build is packaged:
-`pnpm deploy-package`
-
-Deploy entirely:
-`pnpm deploy`
-
-To specify custom profile:
-`PROFILE=local pnpm deploy`
-
-To specify another region
-`PROFILE=local REGION=us-west-2 pnpm deploy`
+```bash
+npx -p @vtcaregorodtcev/remark-aws-backend -c "PROFILE=local REGION=us-west-2 npm run deploy"
+```
