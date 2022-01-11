@@ -3,20 +3,39 @@ import { v4 } from 'uuid';
 import { Bookmark } from '../types/bookmark';
 
 export class BookmarkProvider {
-  constructor(private readonly db: DynamoDB, private readonly table: string) {}
+  constructor(private readonly db: DynamoDB, private readonly table: string) { }
 
   async createBookmark(bookmark: Bookmark): Promise<Bookmark> {
     const item = { ...bookmark, Id: v4() };
 
-    await this.db
-      .putItem({
+    return new Promise((resolve, reject) => {
+      this.db
+        .putItem({
+          TableName: this.table,
+          Item: DynamoDB.Converter.marshall(item),
+          ConditionExpression: 'attribute_not_exists(Link)',
+        })
+        .promise()
+        .then(() => resolve(item as Bookmark))
+        .catch(async (e: { code: string }) => {
+          if (e.code === 'ConditionalCheckFailedException') {
+            return resolve(this.getBookmarkByLink(item.Link));
+          }
+
+          reject(e);
+        });
+    });
+  }
+
+  async getBookmarkByLink(Link: string): Promise<Bookmark> {
+    const bookmark = await this.db
+      .getItem({
         TableName: this.table,
-        Item: DynamoDB.Converter.marshall(item),
-        ConditionExpression: 'attribute_not_exists(id)',
+        Key: { Link: { S: Link } },
       })
       .promise();
 
-    return item as Bookmark;
+    return BookmarkProvider.unmarshall(bookmark.Item) as Bookmark;
   }
 
   async updateBookmark(bookmark: Bookmark): Promise<Bookmark> {
@@ -26,7 +45,7 @@ export class BookmarkProvider {
         Item: DynamoDB.Converter.marshall(bookmark),
       })
       .promise();
-    
+
     return bookmark;
   }
 

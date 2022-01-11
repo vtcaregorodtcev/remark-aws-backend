@@ -28,18 +28,14 @@ Resources:
           AttributeType: S
         - AttributeName: Link
           AttributeType: S
-        - AttributeName: Label
-          AttributeType: S
       KeySchema:
-        - AttributeName: Id
+        - AttributeName: Link
           KeyType: HASH
-        - AttributeName: Label
-          KeyType: RANGE
       BillingMode: PAY_PER_REQUEST
       GlobalSecondaryIndexes:
-        - IndexName: LinkIndex
+        - IndexName: IdIndex
           KeySchema:
-            - AttributeName: Link
+            - AttributeName: Id
               KeyType: HASH
           Projection:
             NonKeyAttributes:
