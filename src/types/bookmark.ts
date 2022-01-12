@@ -3,5 +3,7 @@ export interface Bookmark {
   Link: string;
   Name: string;
   Label: string;
-  BoW: string;
+  Text: string;
+  TopLabels: string;
+  IsRemarked: boolean;
 }

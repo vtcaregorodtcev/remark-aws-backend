@@ -10,7 +10,8 @@ module.exports = {
   },
   rules: {
     quotes: ['error', 'single', { 'avoidEscape': true }],
-    semi: [2, 'always']
+    semi: [2, 'always'],
+    '@typescript-eslint/ban-ts-comment': 'off'
   },
   extends: [
     'eslint:recommended',

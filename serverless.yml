@@ -28,6 +28,7 @@ provider:
     STAGE: ${self:provider.stage}
 
     BOOKMARKS_TABLE_NAME: ${self:custom.env.bookmarksTableName}
+    MODEL_BUCKET: !Ref ModelBucket
 
 custom:
   profiles: ${file(./sls/profiles.yml)}
@@ -59,6 +60,7 @@ plugins:
   - serverless-webpack
   - serverless-deployment-bucket
   - serverless-uuid
+  - serverless-offline
 
 functions:
   - ${file(./sls/functions.yml)}

@@ -25,3 +25,13 @@ updateBookmark:
         path: bookmarks/{bookmarkId}
         cors: true
         private: true
+trainModel:
+  handler: src/handlers/trainModel.handler
+  name: ${self:custom.namePrefix}-train-model-handler
+  events:
+    - stream:
+        type: dynamodb
+        arn:
+          Fn::GetAtt: [BookmarksTable, StreamArn]
+        enabled: true
+        maximumRetryAttempts: 2

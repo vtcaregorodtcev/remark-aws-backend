@@ -19,6 +19,11 @@ Resources:
       Name: /remark/${self:provider.stage}/apis/bookmarks-rest/api-key
       Type: String
       Value: ${self:custom.env.apiKey}
+  ModelBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: ${self:custom.namePrefix}-model-bucket
+      AccessControl: Private
   BookmarksTable:
     Type: AWS::DynamoDB::Table
     Properties:
@@ -41,6 +46,8 @@ Resources:
             NonKeyAttributes:
               - Name
             ProjectionType: INCLUDE
+      StreamSpecification:
+        StreamViewType: KEYS_ONLY
   iamLambdaRoleExecution:
     Type: AWS::IAM::Role
     Properties:
@@ -69,6 +76,19 @@ Resources:
                   - logs:PutLogEvents
                 Resource:
                   - "arn:aws:logs:*:*:*"
+        - PolicyName: S3_Policy
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                  - s3:GetObject
+                  - s3:PutObject
+                Resource:
+                  - !Join
+                    - ""
+                    - - !GetAtt ModelBucket.Arn
+                      - "/*"
         - PolicyName: DynamoDB_Policy
           PolicyDocument:
             Version: "2012-10-17"
@@ -81,6 +101,10 @@ Resources:
                   - dynamodb:PutItem
                   - dynamodb:UpdateItem
                   - dynamodb:DeleteItem
+                  - dynamodb:DescribeStream
+                  - dynamodb:GetRecords
+                  - dynamodb:GetShardIterator
+                  - dynamodb:ListStreams
                 Resource:
                   - "arn:aws:dynamodb:${self:provider.region}:${self:custom.accountId}:table/${self:custom.env.bookmarksTableName}"
                   - "arn:aws:dynamodb:${self:provider.region}:${self:custom.accountId}:table/${self:custom.env.bookmarksTableName}/index/*"
