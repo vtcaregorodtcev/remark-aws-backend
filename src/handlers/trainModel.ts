@@ -20,7 +20,7 @@ export const handler: DynamoDBStreamHandler = async (event) => {
       const bookmarks = await bookmarksProvider.scanBookmarks();
 
       logger.log('Training...');
-      const model = modelProvider.train(ModelProvider.create(), bookmarks);
+      const model = ModelProvider.train(bookmarks);
 
       logger.log('Training Success!', model);
       await modelProvider.save(model);

@@ -11,6 +11,22 @@ export class ModelProvider {
     return new BayesClassifier();
   }
 
+  public static train(bookmarks: Bookmark[] = []): BayesClassifier {
+    const model = ModelProvider.create();
+
+    bookmarks.map((bookmark) => {
+      const { Text, Label } = bookmark || {};
+
+      if (Text && Label) {
+        model.addDocument(Text, Label);
+      }
+    });
+
+    model.train();
+
+    return model;
+  }
+
   async load(): Promise<BayesClassifier> {
     const raw = await this.s3.getObject({
       Bucket: this.bucket,
@@ -24,20 +40,6 @@ export class ModelProvider {
     }
 
     return ModelProvider.create();
-  }
-
-  train(model: BayesClassifier, bookmarks: Bookmark[] = []): BayesClassifier {
-    bookmarks.map((bookmark) => {
-      const { Text, Label } = bookmark || {};
-
-      if (Text && Label) {
-        model.addDocument(Text, Label);
-      }
-    });
-
-    model.train();
-
-    return model;
   }
 
   async save(model: BayesClassifier): Promise<void> {
