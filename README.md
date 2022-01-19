@@ -1,6 +1,16 @@
-# Remark-aws-backend
+<p align="center" dir="auto">
+  <img style="width: 60%;" src="src/assets/logo.svg" />
+</p>
+<p align="center" dir="auto">
+  <a href="/LICENSE" >
+    <img src="https://img.shields.io/badge/license-MIT-green" />
+  </a>
+  <img src="https://badge.fury.io/js/@vtcaregorodtcev%2Fremark-aws-backend.svg" />
+</p>
 
-Open-source AWS based backend for Remark, AI-powered <b>`bookmark manager`</b> for web. 
+---
+
+Open-source AWS based backend for Remark, AI-powered <b>`bookmark manager`</b> for web.
 
 ## Why?
 
@@ -41,3 +51,14 @@ npx -p @vtcaregorodtcev/remark-aws-backend -c "npm run deploy"
 ```bash
 npx -p @vtcaregorodtcev/remark-aws-backend -c "PROFILE=local REGION=us-west-2 npm run deploy"
 ```
+
+6. Go to [SSM Parametrs store](https://console.aws.amazon.com/systems-manager/parameters) to get needed info about your api. It will be needed by Remark chrome extension.
+
+<img src="src/assets/parametrs.png" alt="ssm keys">
+
+## Ecosystem
+
+| Project                                                                       | Status                                                       | Description                                                                               |
+| ----------------------------------------------------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------------------------------------------- |
+| [remark-extension](https://github.com/vtcaregorodtcev/remark-extension)       | <img src="https://img.shields.io/badge/license-MIT-green" /> | The main client. Chrome web-extension. |
+| [remark-telegram-bot](https://github.com/vtcaregorodtcev/remark-telegram-bot) | <img src="https://img.shields.io/badge/license-MIT-green" /> | Mobile client of Remark based on telegram messanger. Have the same functionality.         |

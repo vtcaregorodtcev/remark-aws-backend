@@ -1,5 +1,6 @@
 createBookmark:
   handler: src/handlers/createBookmark.handler
+  timeout: 30
   name: ${self:custom.namePrefix}-create-bookmark-handler
   events:
     - http:
@@ -27,6 +28,7 @@ updateBookmark:
         private: true
 trainModel:
   handler: src/handlers/trainModel.handler
+  timeout: 60
   name: ${self:custom.namePrefix}-train-model-handler
   events:
     - stream:
