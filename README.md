@@ -10,7 +10,7 @@
 
 ---
 
-Open-source AWS based backend for Remark, AI-powered <b>`bookmark manager`</b> for web.
+Open-source AWS-based backend for Remark, AI-powered <b>`bookmark manager`</b> for web.
 
 ## Why?
 
